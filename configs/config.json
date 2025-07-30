@@ -1,0 +1,7 @@
+{
+  "input_annotation_path": "/path/to/input-annotation.json",
+  "image_path": "/path/to/image",
+  "output_dir": "/path/to/output/",
+  "area_ratio": 0.2,
+  "sigma_ratio": 0.3
+}
