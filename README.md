@@ -88,9 +88,9 @@ source rgb2heatmap-env/bin/activate</code></pre>
 
 <h2>🚀 How to Run Inference</h2>
 
-<p>You can configure and run the inference process using a JSON configuration by running thiis command:</p>
+<p>You can configure and run the inference process using a JSON configuration by running this command:</p>
 
-<pre><code>python run_app.py  config.json</code></pre>
+<pre><code>python run_app.py  configs/config.json</code></pre>
 
 <p><strong>Example config.json</strong></p>
 <pre><code>{
@@ -131,6 +131,11 @@ source rgb2heatmap-env/bin/activate</code></pre>
       <td><code>image_path</code></td>
       <td>str</td>
       <td>Path to the image on which you want to run inference.</td>
+    </tr>
+    <tr>
+      <td><code>output_dir</code></td>
+      <td>str</td>
+      <td>Directory where the output (the image) will be saved</td>
     </tr>
     <tr>
       <td><code>area_ratio</code></td>
