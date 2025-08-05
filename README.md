@@ -1,5 +1,18 @@
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/gist/zrajaei/d746371f9f26ccb1096896061809cc6e/rgb2heatmap_test_colab.ipynb)
+
+<h1>🔍 Overview</h1>
+<p>This repository generates smooth attention heatmaps from object detection results.
+    It supports:
+    <ul>
+        <li>Input images and COCO-format bounding boxes</li>
+        <li>Gaussian-based heatmap generation per object</li>
+        <li>Central region focus via area_ratio</li>
+        <li>Simple inference pipeline via JSON config</li>
+    </ul>
+</p>
+
 <h1>Generate Heatmap</h1>
-<p>In some applications, such as visual analytics for marketing, it is valuable to visualize object presence or attention focus via a heatmap. This algorithm creates a smooth heatmap over each detected object based on its bounding box.</p>
+<p>In some applications, such as visual analytics for marketing, it is valuable to visualize object presence or attention focus via a heatmap. This algorithm creates a smooth heatmap over each detected object based on its bounding box (bbox).</p>
 
 <h2>⚙️ Algorithm Steps:</h2>
 
@@ -7,15 +20,15 @@
     <li><h3>Input:</h3></li>
     <ul>
         <li>An image (as a NumPy array)</li>
-        <li>A list of bounding boxes, each in format <code>[x, y, width, height]</code></li>
+        <li>A list of bboxes, each in format <code>[x, y, width, height]</code></li>
     </ul>
     <li><h3>Generate heatmap for each bbox:</h3></li>
     <ol>
-            <li><h4 id="extract_central_region">Exract the cetral region per bbox</h4>
-             <p>We extract a central region for each bounding box based on an area_ratio, according to the following steps:</p>
+            <li><h4 id="extract_central_region">Extract the cetral region per bbox</h4>
+             <p>We extract a central region for each bbox based on an area_ratio, according to the following steps:</p>
                 <ol>
-                    <li>Compute the center of the bounding box <code>(center_x, center_y)</code></li>
-                    <li>Calculate the area of the bounding box:</li>
+                    <li>Compute the center of the bbox <code>(center_x, center_y)</code></li>
+                    <li>Calculate the area of the bbox:</li>
                     <div style="text-align:center; font-family: 'Times New Roman', serif; font-size: 1.2em;">
                     <i><b>central_region_area</b></i> = <i><b>area</b></i> × <i><b>area_ratio</b></i>
                     </div>
@@ -31,14 +44,14 @@
                 </div>
              </li>
              <li><h4>Select a random point inside the central region</h4>
-             <p>Randomly Select a Pixel Coordinate Inside the Central Region</p>
+             <p>Randomly selected a pixel coordinate inside the central region.</p>
             <p><b>The result after second step:</b></p>
              <div style="text-align: center;">
              <img src="data/select_random_point.gif" alt="Select Random Point" style="max-width: 100%; height: auto;">
              </div>
              </li>
              <li><h4 id="generate_gaussian_heatmap">Generate Gaussian Heatmap</h4>
-             <p>We generate a smooth 2D Gaussian heatmap centered on the selected pixel inside the bounding box. This heatmap visually highlights the object with intensity fading outwards. To adapt to different object sizes and add slight randomness, we scale the Gaussian standard deviations (<code>sigma_x</code>, <code>sigma_y</code>) by a factor randomly sampled around the provided <code>sigma_ratio</code> (±0.1).</p>
+             <p>We generate a smooth 2D Gaussian heatmap centered on the selected pixel inside the bbox. This heatmap visually highlights the object with intensity fading outwards. To adapt to different object sizes and add slight randomness, we scale the Gaussian standard deviations (<code>sigma_x</code>, <code>sigma_y</code>) by a factor randomly sampled around the provided <code>sigma_ratio</code> (±0.1).</p>
              <p><b>The heatmap generation follows these steps:</b></p>
              <ol>
                 <li>Sample a scaling factor <code>alpha</code> uniformly between <code>sigma_ratio - 0.1</code> and <code>sigma_ratio + 0.1</code>.</li>
@@ -50,14 +63,14 @@
                     </div>
                 </li>
             </ol>
-            <p><b>Note</b> : Some bounding boxes may overlap in the image. When this happens, the corresponding heatmaps will also overlap. To accurately represent the combined intensity, we take the maximum value between overlapping heatmaps at each pixel, rather than summing them. This prevents artificially inflated values in the heatmap visualization.</p>
+            <p><b>Note</b> : Some bboxes may overlap in the image. When this happens, the corresponding heatmaps will also overlap. To accurately represent the combined intensity, we take the maximum value between overlapping heatmaps at each pixel, rather than summing them. This prevents artificially inflated values in the heatmap visualization.</p>
             </li>
             <li><h4>Normalize heatmap values</h4>
             <p>To scale the heatmap values to a consistent range for visualization and comparison, we apply min-max normalization. This rescales all heatmap values to the range <code>[0,1]</code> by subtracting the minimum value and dividing by the range:</p>
             <p align="center">
             <img src="data/normalization.png" alt="Normalization" style="max-width: 100%; height: auto;">
             </p>
-            <p><b>The result after third step:</b></p>
+            <p><b>The result after fourth step:</b></p>
             <div style="text-align: center;">
             <img src="data/generate_gaussian_heatmap.gif" alt="Generate Gaussian Heatmap" style="max-width: 100%; height: auto;">
             </div>
