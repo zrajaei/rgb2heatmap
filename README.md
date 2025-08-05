@@ -1,3 +1,12 @@
+<!-- Add this near the top of your README -->
+## Test Notebook
+
+Click the badge below to run the example notebook in Google Colab:
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/gist/zrajaei/d746371f9f26ccb1096896061809cc6e/rgb2heatmap_test_colab.ipynb)
+
+
+
 <h1>🔍 Overview</h1>
 <p>This repository generates smooth attention heatmaps from object detection results.
     It supports:
